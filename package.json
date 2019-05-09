@@ -4,7 +4,7 @@
   "description": "ark server status checker",
   "main": "ASSC.js",
   "scripts": {
-  "start" : "node ASSC.js"
+  "start" : "node ASSC.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ddavid23",
