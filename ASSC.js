@@ -25,7 +25,7 @@ function update() {
       var status = 'Server offline';
       console.log(body.motd);
       if(body.is_online) {
-          if((body.motd=="&cWe are under maintenance.")||(body.players=body.maxplayers)){
+          if((body.motd=="&cWe are under maintenance.")||(body.players>=body.maxplayers)){
             client.user.setStatus('online')
             //.then(console.log)
             .catch(console.error);
