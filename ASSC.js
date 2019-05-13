@@ -50,6 +50,11 @@ function update() {
       .catch(console.error);
   });
 
+  client.on("message", (message) => {
+  if (message.content.startsWith("version")) {
+    message.channel.send(body.version);
+    update();
+  
 }
 client.on("ready", () => {
   console.log("I am ready!");
