@@ -2,6 +2,8 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const settings = require('./config.json');
+const channel = require('./channel.json');
+const test = require('./test.json');
 var statustring = "No signal";
 
 var request = require('request');
@@ -11,11 +13,7 @@ var url = 'https://ark-servers.net/api/?object=servers&element=detail&key=5T5nR5
 
 
 function update() {
-  /*seconds = seconds + 1;
-  secondsString = seconds.toString();
-  client.user.setActivity(secondsString, { type: 'Playing' })
-  .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
-  .catch(console.error);*/
+
   request(url, function(err, response, body) {
       if(err) {
           console.log(err);
@@ -54,20 +52,98 @@ function update() {
   
 }
 
-
-      
-      
-client.on("ready", () => {
-  console.log("I am ready!");
-  client.setInterval(update,20000);
-});
-
+request(url, function(err, response, body) {
+   body = JSON.parse(body);
 client.on("message", (message) => {
-  if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
+  if (message.content.startsWith("!version")) {
+    message.channel.send("Loading...")
+    .then((msg) => { // Resolve promise
+				msg.edit("Current version D-DinoNet is on: " + (body.version) ) // Edits message with current timestamp minus timestamp of message
+			});
     update();
   }
 }
 );
+});
 
-client.login(process.env.BOT_TOKEN);
+request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!players")&&(body.players >= 2)) {
+    message.channel.send("Loading...")
+    .then((msg) => { 
+				msg.edit("There are " +  (body.players) + " players online right now.")
+    });
+      update();
+    }
+}
+);
+});
+  
+  request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!players")&&(body.players == 1)) {
+    message.channel.send("Loading...")
+    .then((msg) => {msg.edit("There is " +  (body.players) + " players online right now.") 
+    update(); 
+      }
+    );
+}
+}
+          );
+          });
+
+  request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!players")&&(body.players = 0)) {
+    message.channel.send("Loading...")
+    .then((msg) => {msg.edit("No players online right now.") 
+    update(); 
+      }
+    );
+}
+}
+          );
+          });
+
+ request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!uptime")){
+    message.channel.send("Loading...")
+    .then((msg) => {msg.edit((body.uptime) + " hours") 
+    update(); 
+      }
+    );
+}
+}
+          );
+          });
+
+//	if(message.content == "!ping"){ // Check if message is "!ping"
+//			message.channel.send("Pinging ...") // Placeholder for pinging ... 
+//			.then((msg) => { // Resolve promise
+//				msg.edit("Current version D-DinoNet is on is: " + (body.version) ) // Edits message with current timestamp minus timestamp of message
+//			});
+//		}
+//} 
+      
+      
+client.on("ready", () => {
+  console.log("I am ready!");
+  client.setInterval(update,30000);
+});
+
+client.on("message", (message) => {
+  if (message.content.startsWith("!ping")) {
+    message.channel("pong!")
+    update();
+  }
+});
+
+
+
+
+client.login(settings.token);
