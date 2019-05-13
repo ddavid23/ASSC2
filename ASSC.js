@@ -54,12 +54,7 @@ function update() {
   
 }
 
-request(url, function(err, response, body) {
-    client.on("message", (message) => {
-  if (message.content.startsWith("version")) {
-    message.channel.send(body.version);
-    update();
-  }
+
       
       
 client.on("ready", () => {
