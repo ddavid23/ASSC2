@@ -11,10 +11,6 @@ var url = 'https://ark-servers.net/api/?object=servers&element=detail&key=5T5nR5
 
 
 function update() {
-    client.on("message", (message) => {
-  if (message.content.startsWith("version")) {
-    message.channel.send(body.version);
-    update();
   /*seconds = seconds + 1;
   secondsString = seconds.toString();
   client.user.setActivity(secondsString, { type: 'Playing' })
@@ -57,6 +53,15 @@ function update() {
 
   
 }
+
+request(url, function(err, response, body) {
+    client.on("message", (message) => {
+  if (message.content.startsWith("version")) {
+    message.channel.send(body.version);
+    update();
+  }
+      
+      
 client.on("ready", () => {
   console.log("I am ready!");
   client.setInterval(update,20000);
