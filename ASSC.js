@@ -2,8 +2,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const settings = require('./config.json');
-const channel = require('./channel.json');
-const test = require('./test.json');
 var statustring = "No signal";
 
 var request = require('request');
@@ -22,8 +20,8 @@ function update() {
       body = JSON.parse(body);
       var status = 'Server offline';
       console.log(body.motd);
-      if(body.is_online) {
-          if((body.motd=="&cWe are under maintenance.")||(body.players>=body.maxplayers)){
+      if(body.is_online == 1) {
+          if((body.is_online == 1)){
             client.user.setStatus('online')
             //.then(console.log)
             .catch(console.error);
@@ -32,15 +30,16 @@ function update() {
             //.then(console.log)
             .catch(console.error);
           }
-            if(body.players) {
+            if(body.players != 0) {
                 status = ' ' + body.players + '  of  ' + ' 13 ';
               } else {
                 status = ' 0  of  ' + ' 13 ';
+               
         }
       } else {
-        client.user.setStatus('dnd')
-        //.then(console.log)
-        .catch(console.error);
+        client.user.setStatus("dnd")
+        status = "Server is offline"
+    
 
       }
       client.user.setActivity(status, { type: 'PLAYING' })
@@ -97,7 +96,7 @@ client.on("message", (message) => {
   request(url, function(err, response, body) {
    body = JSON.parse(body);
 client.on("message", (message) => {
-  if (message.content.startsWith("!players")&&(body.players = 0)) {
+  if (message.content.startsWith("!players")&&(body.players == 0)) {
     message.channel.send("Loading...")
     .then((msg) => {msg.edit("No players online right now.") 
     update(); 
@@ -113,7 +112,7 @@ client.on("message", (message) => {
 client.on("message", (message) => {
   if (message.content.startsWith("!uptime")){
     message.channel.send("Loading...")
-    .then((msg) => {msg.edit((body.uptime) + " hours") 
+    .then((msg) => {msg.edit((body.uptime) + "% of the time") 
     update(); 
       }
     );
@@ -122,17 +121,37 @@ client.on("message", (message) => {
           );
           });
 
-//	if(message.content == "!ping"){ // Check if message is "!ping"
-//			message.channel.send("Pinging ...") // Placeholder for pinging ... 
-//			.then((msg) => { // Resolve promise
-//				msg.edit("Current version D-DinoNet is on is: " + (body.version) ) // Edits message with current timestamp minus timestamp of message
-//			});
-//		}
-//} 
-      
+ request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!status") && (body.is_online == 1)){
+    message.channel.send("Loading...")
+    .then((msg) => {msg.edit("Server is Running") 
+    update(); 
+      }
+    );
+}
+}
+          );
+          });
+
+ request(url, function(err, response, body) {
+   body = JSON.parse(body);
+client.on("message", (message) => {
+  if (message.content.startsWith("!status") && (body.is_online == 0)){
+    message.channel.send("Loading...")
+    .then((msg) => {msg.edit("Server is Closed") 
+    update(); 
+      }
+    );
+}
+}
+          );
+          });
+
       
 client.on("ready", () => {
-  console.log("I am ready!");
+  console.log("I was bready all along!");
   client.setInterval(update,30000);
 });
 
@@ -143,7 +162,10 @@ client.on("message", (message) => {
   }
 });
 
-
+var http = require("http");
+setInterval(function() {
+    http.get("http://arkdiscordbot.herokuapp.com");
+}, 300000); // every 5 minutes (300000)
 
 
 client.login(settings.token);
