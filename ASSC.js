@@ -56,29 +56,29 @@ request(url, function(err, response, body) {
 client.on("message", (message) => {
   if (message.content.startsWith("!version")) {
     message.channel.send("Loading...")
-    .then((msg) => { // Resolve promise
-				msg.edit("Current version D-DinoNet is on: " + (body.version) ) // Edits message with current timestamp minus timestamp of message
-			});
-    update();
-  }
+    .then((msg) => {msg.edit("Current version D-DinoNet is on: " + (body.version) ) // Edits message with current timestamp minus timestamp of message
+    update(); 
+      }
+    );
 }
-);
-});
+}
+          );
+          });
 
 request(url, function(err, response, body) {
    body = JSON.parse(body);
 client.on("message", (message) => {
   if (message.content.startsWith("!players")&&(body.players >= 2)) {
     message.channel.send("Loading...")
-    .then((msg) => { 
-				msg.edit("There are " +  (body.players) + " players online right now.")
-    });
-      update();
-    }
+    .then((msg) => {msg.edit("There are " +  (body.players) + " players online right now.")
+    update(); 
+      }
+    );
 }
-);
-});
-  
+}
+          );
+          });
+
   request(url, function(err, response, body) {
    body = JSON.parse(body);
 client.on("message", (message) => {
